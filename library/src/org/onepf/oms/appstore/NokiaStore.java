@@ -139,7 +139,7 @@ public class NokiaStore extends DefaultAppstore {
 				byte[] EXPECTED_FINGERPRINT = hexStringToByteArray(EXPECTED_SHA1_FINGERPRINT);
 
 				if (Arrays.equals(ENABLER_FINGERPRINT, EXPECTED_FINGERPRINT)) {
-					Log.i("isBillingAvailable", "NIAP signature verified");
+					if (IS_DEBUG_MODE) Log.i("isBillingAvailable", "NIAP signature verified");
 					return true;
 				}
 			}
@@ -173,7 +173,8 @@ public class NokiaStore extends DefaultAppstore {
 	}
 
 	private void logError(String msg) {
-		Log.e(TAG, msg);
+		if (IS_DEBUG_MODE)
+			Log.e(TAG, msg);
 	}
 
 }

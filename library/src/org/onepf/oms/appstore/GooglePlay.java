@@ -109,7 +109,7 @@ public class GooglePlay extends DefaultAppstore {
                                 if (isDebugLog()) Log.d(TAG, "isBillingAvailable() Google Play billing unavaiable");
                             }
                         } catch (RemoteException e) {
-                            Log.e(TAG, "isBillingAvailable() RemoteException while setting up in-app billing", e);
+                            if (isDebugLog()) Log.e(TAG, "isBillingAvailable() RemoteException while setting up in-app billing", e);
                         } finally {
                             latch.countDown();
                             context.unbindService(this);
@@ -121,7 +121,7 @@ public class GooglePlay extends DefaultAppstore {
                 try {
                     latch.await(TIMEOUT_BILLING_SUPPORTED, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
-                    Log.e(TAG, "isBillingAvailable() billing is not supported. Initialization error. ", e);
+                    if (isDebugLog()) Log.e(TAG, "isBillingAvailable() billing is not supported. Initialization error. ", e);
                 }
             }
         }

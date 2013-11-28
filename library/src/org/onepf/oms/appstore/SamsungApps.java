@@ -132,7 +132,7 @@ public class SamsungApps extends DefaultAppstore {
                                     isBillingAvailable = true;
                                 }
                             } catch (IabException e) {
-                                Log.e(TAG, "isBillingAvailable() failed", e);
+                                if (debugLog) Log.e(TAG, "isBillingAvailable() failed", e);
                             } finally {
                                 getInAppBillingService().dispose();
                                 mainLatch.countDown();
@@ -149,7 +149,7 @@ public class SamsungApps extends DefaultAppstore {
         try {
             mainLatch.await();
         } catch (InterruptedException e) {
-            Log.e(TAG, "isBillingAvailable() interrupted", e);
+            if (debugLog) Log.e(TAG, "isBillingAvailable() interrupted", e);
         }
 
         return isBillingAvailable;

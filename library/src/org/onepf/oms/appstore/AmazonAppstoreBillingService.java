@@ -338,7 +338,7 @@ public class AmazonAppstoreBillingService extends BasePurchasingObserver impleme
         if (listener != null) {
             listener.onIabPurchaseFinished(result, purchase);
         } else {
-            Log.e(TAG, "Something went wrong: PurchaseFinishedListener is null");
+            if (isDebugLog()) Log.e(TAG, "Something went wrong: PurchaseFinishedListener is null");
         }
     }
 
@@ -370,7 +370,7 @@ public class AmazonAppstoreBillingService extends BasePurchasingObserver impleme
     	    json.put(JSON_KEY_RECEIPT_PURCHASE_TOKEN, receipt.getPurchaseToken());			
 			if (isDebugLog()) Log.d(TAG, "generateOriginalJson(): JSON\n" + json.toString());
 		} catch (JSONException e) {
-			Log.e(TAG, "generateOriginalJson() failed to generate JSON", e);
+			if (isDebugLog()) Log.e(TAG, "generateOriginalJson() failed to generate JSON", e);
 		}
     	return json.toString();
 	}

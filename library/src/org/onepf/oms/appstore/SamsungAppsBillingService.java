@@ -191,7 +191,7 @@ public class SamsungAppsBillingService implements AppstoreInAppBillingService {
                     if (isDebugLog()) Log.d(TAG, "getItemsInbox, startNum = " + startNum + ", endNum = " + endNum);
                     itemInbox = mIapConnector.getItemsInbox(activity.getPackageName(), itemGroupId, startNum, endNum, "19700101", today);
                 } catch (RemoteException e) {
-                    Log.e(TAG, "Samsung getItemsInbox: " + e.getMessage());
+                    if (isDebugLog()) Log.e(TAG, "Samsung getItemsInbox: " + e.getMessage());
                 }
                 startNum += ITEM_RESPONSE_COUNT;
                 endNum += ITEM_RESPONSE_COUNT;
@@ -222,7 +222,7 @@ public class SamsungAppsBillingService implements AppstoreInAppBillingService {
                         try {
                             itemList = mIapConnector.getItemList(CURRENT_MODE, activity.getPackageName(), itemGroupId, startNum, endNum, ITEM_TYPE_ALL);
                         } catch (RemoteException e) {
-                            Log.e(TAG, "Samsung getItemList: " + e.getMessage());
+                            if (isDebugLog()) Log.e(TAG, "Samsung getItemList: " + e.getMessage());
                         }
                         startNum += ITEM_RESPONSE_COUNT;
                         endNum += ITEM_RESPONSE_COUNT;
@@ -310,7 +310,7 @@ public class SamsungAppsBillingService implements AppstoreInAppBillingService {
                     purchase.setPurchaseTime(Long.parseLong(purchaseJson.getString(JSON_KEY_PURCHASE_DATE)));
                     purchase.setToken(purchaseJson.getString(JSON_KEY_PURCHASE_ID));
                 } catch (JSONException e) {
-                    Log.e(TAG, "JSON parse error: " + e.getMessage());
+                    if (isDebugLog()) Log.e(TAG, "JSON parse error: " + e.getMessage());
                 }
 
                 purchase.setItemType(purchasingItemType);
@@ -393,7 +393,7 @@ public class SamsungAppsBillingService implements AppstoreInAppBillingService {
                 }
             }
         } catch (RemoteException e) {
-            Log.e(TAG, "Init IAP: " + e.getMessage());
+            if (isDebugLog()) Log.e(TAG, "Init IAP: " + e.getMessage());
         }
         setupListener.onIabSetupFinished(new IabResult(errorCode, errorMsg));
     }
@@ -438,7 +438,7 @@ public class SamsungAppsBillingService implements AppstoreInAppBillingService {
                     }
                 }
             } catch (JSONException e) {
-                Log.e(TAG, "JSON parse error: " + e.getMessage());
+                if (isDebugLog()) Log.e(TAG, "JSON parse error: " + e.getMessage());
             }
         }
         return items.size() == ITEM_RESPONSE_COUNT;

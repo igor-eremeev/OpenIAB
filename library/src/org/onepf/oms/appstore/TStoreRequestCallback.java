@@ -39,6 +39,7 @@ public class TStoreRequestCallback implements IapPlugin.RequestCallback {
 
     private final Context mContext;
     private final TStoreBillingService mBillingService;
+    private final static boolean m_bDebugLog = false;
     private final IabHelper.OnIabPurchaseFinishedListener mListener;
 
     public TStoreRequestCallback(TStoreBillingService billingService, Context context, IabHelper.OnIabPurchaseFinishedListener listener) {
@@ -50,7 +51,7 @@ public class TStoreRequestCallback implements IapPlugin.RequestCallback {
 
     @Override
     public void onError(String reqid, String errcode, String errmsg) {
-        Log.e(TAG, "TStore error. onError() identifier:" + reqid + " code:" + errcode + " msg:" + errmsg);
+	    if (m_bDebugLog) Log.e(TAG, "TStore error. onError() identifier:" + reqid + " code:" + errcode + " msg:" + errmsg);
         // TODO: support different error codes
         IabResult result = new IabResult(IabHelper.BILLING_RESPONSE_RESULT_ERROR, errmsg);
     }
@@ -58,7 +59,7 @@ public class TStoreRequestCallback implements IapPlugin.RequestCallback {
     @Override
     public void onResponse(IapResponse data) {
         if (data == null || data.getContentLength() <= 0) {
-            Log.e(TAG, "onResponse() response data is null");
+            if (m_bDebugLog) Log.e(TAG, "onResponse() response data is null");
             return;
         }
         Response response = new GsonConverter().fromJson(data.getContentToString());

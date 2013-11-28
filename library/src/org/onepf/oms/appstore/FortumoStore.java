@@ -128,7 +128,7 @@ public class FortumoStore extends DefaultAppstore {
                                     }
                                 }
                             } catch (IabException e) {
-                                Log.e(TAG, "Error while requesting purchases", e);
+                                if (isDebugLog()) Log.e(TAG, "Error while requesting purchases", e);
                             }
                         } else {
                             storeToReturn[0] = fortumoStore;
@@ -140,7 +140,7 @@ public class FortumoStore extends DefaultAppstore {
             try {
                 latch.await();
             } catch (InterruptedException e) {
-                Log.e(TAG, "Setup was interrupted", e);
+                if (isDebugLog()) Log.e(TAG, "Setup was interrupted", e);
             }
         }
         return storeToReturn[0];

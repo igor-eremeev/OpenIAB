@@ -95,7 +95,7 @@ public class OpenAppstore extends DefaultAppstore {
         try {
             return openAppstoreService.isBillingAvailable(packageName);
         } catch (RemoteException e) {
-            Log.e(TAG, "isBillingAvailable() packageName: " + packageName, e);
+            if (isDebugLog()) Log.e(TAG, "isBillingAvailable() packageName: " + packageName, e);
             return false;
         }
     }
@@ -105,7 +105,7 @@ public class OpenAppstore extends DefaultAppstore {
         try {
             return openAppstoreService.getPackageVersion(packageName);
         } catch (RemoteException e) {
-            Log.e(TAG, "getPackageVersion() packageName: " + packageName, e);
+            if (isDebugLog()) Log.e(TAG, "getPackageVersion() packageName: " + packageName, e);
             return Appstore.PACKAGE_VERSION_UNDEFINED;
         }
     }

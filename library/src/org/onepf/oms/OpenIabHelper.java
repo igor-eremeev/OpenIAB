@@ -666,18 +666,18 @@ public class OpenIabHelper {
                             String appstoreName = openAppstoreService.getAppstoreName();
                             Intent billingIntent = openAppstoreService.getBillingServiceIntent();
                             if (appstoreName == null) { // no name - no service
-                                Log.e(TAG, "discoverOpenStores() Appstore doesn't have name. Skipped. ComponentName: " + name);
+                                if (isDebugLog()) Log.e(TAG, "discoverOpenStores() Appstore doesn't have name. Skipped. ComponentName: " + name);
                             } else if (billingIntent == null) { // don't handle stores without billing support
                                 if (isDebugLog()) Log.d(TAG, "discoverOpenStores(): billing is not supported by store: " + name);
                             } else if ((options.verifyMode == Options.VERIFY_EVERYTHING) && !options.storeKeys.containsKey(appstoreName)) {
                                 // don't connect to OpenStore if no key provided and verification is strict
-                                Log.e(TAG, "discoverOpenStores() verification is required but publicKey is not provided: " + name);
+                                if (isDebugLog()) Log.e(TAG, "discoverOpenStores() verification is required but publicKey is not provided: " + name);
                             } else {
                                 String publicKey = options.storeKeys.get(appstoreName);
                                 if (options.verifyMode == Options.VERIFY_SKIP) publicKey = null;
                                 final OpenAppstore openAppstore = new OpenAppstore(context, appstoreName, openAppstoreService, billingIntent, publicKey, this);
                                 openAppstore.componentName = name;
-                                Log.d(TAG, "discoverOpenStores() add new OpenStore: " + openAppstore);
+                                if (isDebugLog()) Log.d(TAG, "discoverOpenStores() add new OpenStore: " + openAppstore);
                                 synchronized (result) {
                                     if (result.contains(openAppstore) == false) {
                                         result.add(openAppstore);
@@ -685,7 +685,7 @@ public class OpenIabHelper {
                                 }
                             }
                         } catch (RemoteException e) {
-                            Log.e(TAG, "discoverOpenStores() ComponentName: " + name, e);
+                            if (isDebugLog()) Log.e(TAG, "discoverOpenStores() ComponentName: " + name, e);
                         }
                         storesToCheck.countDown();
                     }
@@ -700,14 +700,14 @@ public class OpenIabHelper {
                    storesToCheck.countDown();
                 }
             }catch (SecurityException e){
-                Log.e(TAG, "bindService() failed for " + packageName, e);
+                if (isDebugLog()) Log.e(TAG, "bindService() failed for " + packageName, e);
                 storesToCheck.countDown();
             }
         }
         try {
             storesToCheck.await(options.discoveryTimeoutMs, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
-            Log.e(TAG, "Interrupted: discovering OpenStores. ", e);
+            if (isDebugLog()) Log.e(TAG, "Interrupted: discovering OpenStores. ", e);
         }
         return result;
     }
@@ -752,7 +752,7 @@ public class OpenIabHelper {
                                 }
                                 if (isDebugLog()) Log.d(TAG, in() + " " + "inventoryCheck() in " + appstore.getAppstoreName() + " found: " + inventory.getAllPurchases().size() + " purchases");
                             } catch (IabException e) {
-                                Log.e(TAG, "inventoryCheck() failed for " + appstore.getAppstoreName());
+                                if (isDebugLog()) Log.e(TAG, "inventoryCheck() failed for " + appstore.getAppstoreName());
                             }
                             storeRemains.countDown();
                         }
@@ -764,7 +764,7 @@ public class OpenIabHelper {
             storeRemains.await(options.checkInventoryTimeoutMs, TimeUnit.MILLISECONDS);
             if (isDebugLog()) Log.d(TAG, in() + " " + "inventory check done");
         } catch (InterruptedException e) {
-            Log.e(TAG, "selectBillingService()  inventory check is failed. candidates: " + candidates.size() 
+            if (isDebugLog()) Log.e(TAG, "selectBillingService()  inventory check is failed. candidates: " + candidates.size()
                     + ", inventory remains: " + storeRemains.getCount() , e);
         }
         return equippedStores;
@@ -815,7 +815,7 @@ public class OpenIabHelper {
         try {
             versionCode = context.getPackageManager().getPackageInfo(packageName, 0).versionCode;
         } catch (NameNotFoundException e) {
-            Log.e(TAG, "Are we installed?", e);
+            if (isDebugLog()) Log.e(TAG, "Are we installed?", e);
         }
         List<Appstore> sameVersion = new ArrayList<Appstore>();
         List<Appstore> higherVersion = new ArrayList<Appstore>();
@@ -1099,7 +1099,7 @@ public class OpenIabHelper {
     }
 
     void logError(String msg) {
-        Log.e(TAG, "In-app billing error: " + msg);
+        if (isDebugLog()) Log.e(TAG, "In-app billing error: " + msg);
     }
 
     void logWarn(String msg) {
